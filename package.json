@@ -28,7 +28,10 @@
     "start:pre": "cross-env REACT_APP_ENV=pre UMI_ENV=dev max dev",
     "start:test": "cross-env REACT_APP_ENV=test MOCK=none UMI_ENV=dev max dev",
     "test:e2e": "node ./tests/run-tests.js",
-    "tsc": "tsc --noEmit"
+    "tsc": "tsc --noEmit",
+    "upload": "node upload.js",
+    "push": "bash push.sh",
+    "ljh": "max build && npm run upload && npm run push"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": "npm run lint-staged:js",
@@ -55,7 +58,8 @@
     "react": "^17.0.0",
     "react-dev-inspector": "^1.7.0",
     "react-dom": "^17.0.0",
-    "react-helmet-async": "^1.2.0"
+    "react-helmet-async": "^1.2.0",
+    "scp2": "^0.5.0"
   },
   "devDependencies": {
     "@ant-design/pro-cli": "^2.1.0",
