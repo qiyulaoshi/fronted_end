@@ -2,9 +2,9 @@
  * @Author: lijiahao@youlai.cn lijiahao@youlai.cn
  * @Date: 2022-08-08 14:04:11
  * @LastEditors: lijiahao@youlai.cn lijiahao@youlai.cn
- * @LastEditTime: 2022-08-16 13:58:18
- * @FilePath: /qiushui_frontend/config/proxy.ts
- * @Description: 
+ * @LastEditTime: 2022-08-16 23:29:56
+ * @FilePath: /fronted_end/config/proxy.ts
+ * @Description:
  */
 /**
  * @name 代理的配置
@@ -22,7 +22,7 @@ export default {
     // localhost:8000/api/** -> https://preview.pro.ant.design/api/**
     '/qiushui/': {
       // 要代理的地址
-      target: 'http://lijiahao.cc:3000/',
+      target: 'http://127.0.0.1:3000/',
       // 配置了这个可以从 http 代理到 https
       // 依赖 origin 的功能可能需要这个，比如 cookie
       changeOrigin: true,

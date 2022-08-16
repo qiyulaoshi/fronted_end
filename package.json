@@ -17,10 +17,12 @@
     "lint:fix": "eslint --fix --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./src ",
     "lint:js": "eslint --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./src",
     "lint:prettier": "prettier -c --write \"src/**/*\" --end-of-line auto",
+    "ljh": "max build && npm run upload && npm run push",
     "openapi": "max openapi",
     "playwright": "playwright install && playwright test",
     "prepare": "husky install",
     "prettier": "prettier -c --write \"src/**/*\"",
+    "push": "bash push.sh",
     "serve": "umi-serve",
     "start": "cross-env UMI_ENV=dev max dev",
     "start:dev": "cross-env REACT_APP_ENV=dev MOCK=none UMI_ENV=dev max dev",
@@ -29,9 +31,7 @@
     "start:test": "cross-env REACT_APP_ENV=test MOCK=none UMI_ENV=dev max dev",
     "test:e2e": "node ./tests/run-tests.js",
     "tsc": "tsc --noEmit",
-    "upload": "node upload.js",
-    "push": "bash push.sh",
-    "ljh": "max build && npm run upload && npm run push"
+    "upload": "node upload.js"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": "npm run lint-staged:js",
@@ -48,6 +48,7 @@
     "@ant-design/icons": "^4.7.0",
     "@ant-design/pro-components": "^1.1.1",
     "@umijs/route-utils": "^2.1.3",
+    "ahooks": "^3.7.0",
     "antd": "^4.20.0",
     "classnames": "^2.3.0",
     "lodash": "^4.17.0",

@@ -1,4 +1,12 @@
-﻿/**
+﻿/*
+ * @Author: lijiahao@youlai.cn lijiahao@youlai.cn
+ * @Date: 2022-08-08 14:04:11
+ * @LastEditors: lijiahao@youlai.cn lijiahao@youlai.cn
+ * @LastEditTime: 2022-08-16 23:53:21
+ * @FilePath: /fronted_end/config/routes.ts
+ * @Description:
+ */
+/**
  * @name umi 的路由配置
  * @description 只支持 path,component,routes,redirect,wrappers,title 的配置
  * @param path  path 只支持两种占位符配置，第一种是动态参数 :id 的形式，第二种是 * 通配符，通配符只能出现路由字符串的最后。
@@ -41,7 +49,7 @@ export default [
     ],
   },
   {
-    name: 'list.table-list',
+    name: 'table-list',
     icon: 'table',
     path: '/list',
     component: './TableList',

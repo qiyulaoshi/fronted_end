@@ -1,24 +1,22 @@
+/*
+ * @Author: lijiahao@youlai.cn lijiahao@youlai.cn
+ * @Date: 2022-08-08 14:04:11
+ * @LastEditors: lijiahao@youlai.cn lijiahao@youlai.cn
+ * @LastEditTime: 2022-08-16 23:36:27
+ * @FilePath: /fronted_end/src/pages/Admin.tsx
+ * @Description:
+ */
 import { HeartTwoTone, SmileTwoTone } from '@ant-design/icons';
 import { PageHeaderWrapper } from '@ant-design/pro-components';
-import { useIntl } from '@umijs/max';
 import { Alert, Card, Typography } from 'antd';
 import React from 'react';
 
 const Admin: React.FC = () => {
-  const intl = useIntl();
   return (
-    <PageHeaderWrapper
-      content={intl.formatMessage({
-        id: 'pages.admin.subPage.title',
-        defaultMessage: 'This page can only be viewed by admin',
-      })}
-    >
+    <PageHeaderWrapper content="'This page can only be viewed by admin'">
       <Card>
         <Alert
-          message={intl.formatMessage({
-            id: 'pages.welcome.alertMessage',
-            defaultMessage: 'Faster and stronger heavy-duty components have been released.',
-          })}
+          message="'Faster and stronger heavy-duty components have been released.'"
           type="success"
           showIcon
           banner

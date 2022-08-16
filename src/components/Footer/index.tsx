@@ -1,13 +1,16 @@
+/*
+ * @Author: lijiahao@youlai.cn lijiahao@youlai.cn
+ * @Date: 2022-08-08 14:04:11
+ * @LastEditors: lijiahao@youlai.cn lijiahao@youlai.cn
+ * @LastEditTime: 2022-08-16 23:35:50
+ * @FilePath: /fronted_end/src/components/Footer/index.tsx
+ * @Description:
+ */
 import { GithubOutlined } from '@ant-design/icons';
 import { DefaultFooter } from '@ant-design/pro-components';
-import { useIntl } from '@umijs/max';
 
 const Footer: React.FC = () => {
-  const intl = useIntl();
-  const defaultMessage = intl.formatMessage({
-    id: 'app.copyright.produced',
-    defaultMessage: '蚂蚁集团体验技术部出品',
-  });
+  const defaultMessage = '蚂蚁集团体验技术部出品';
 
   const currentYear = new Date().getFullYear();
 
