@@ -1,8 +1,14 @@
-import { QuestionCircleOutlined } from '@ant-design/icons';
+/*
+ * @Author: lijiahao@youlai.cn lijiahao@youlai.cn
+ * @Date: 2022-08-08 14:04:11
+ * @LastEditors: lijiahao@youlai.cn lijiahao@youlai.cn
+ * @LastEditTime: 2022-08-17 01:19:20
+ * @FilePath: /fronted_end/src/components/RightContent/index.tsx
+ * @Description:
+ */
 import { SelectLang, useModel } from '@umijs/max';
 import { Space } from 'antd';
 import React from 'react';
-import HeaderSearch from '../HeaderSearch';
 import Avatar from './AvatarDropdown';
 import styles from './index.less';
 
@@ -23,37 +29,6 @@ const GlobalHeaderRight: React.FC = () => {
   }
   return (
     <Space className={className}>
-      <HeaderSearch
-        className={`${styles.action} ${styles.search}`}
-        placeholder="站内搜索"
-        defaultValue="umi ui"
-        options={[
-          { label: <a href="https://umijs.org/zh/guide/umi-ui.html">umi ui</a>, value: 'umi ui' },
-          {
-            label: <a href="next.ant.design">Ant Design</a>,
-            value: 'Ant Design',
-          },
-          {
-            label: <a href="https://protable.ant.design/">Pro Table</a>,
-            value: 'Pro Table',
-          },
-          {
-            label: <a href="https://prolayout.ant.design/">Pro Layout</a>,
-            value: 'Pro Layout',
-          },
-        ]}
-        // onSearch={value => {
-        //   console.log('input', value);
-        // }}
-      />
-      <span
-        className={styles.action}
-        onClick={() => {
-          window.open('https://pro.ant.design/docs/getting-started');
-        }}
-      >
-        <QuestionCircleOutlined />
-      </span>
       <Avatar />
       <SelectLang className={styles.action} />
     </Space>

@@ -2,7 +2,7 @@
  * @Author: lijiahao@youlai.cn lijiahao@youlai.cn
  * @Date: 2022-08-08 14:04:11
  * @LastEditors: lijiahao@youlai.cn lijiahao@youlai.cn
- * @LastEditTime: 2022-08-17 00:39:16
+ * @LastEditTime: 2022-08-17 01:10:58
  * @FilePath: /fronted_end/src/services/ant-design-pro/api.ts
  * @Description:
  */
@@ -22,9 +22,10 @@ export async function currentUser(options?: { [key: string]: any }) {
 
 /** 退出登录接口 POST /api/login/outLogin */
 export async function outLogin(options?: { [key: string]: any }) {
-  return request<Record<string, any>>('/api/login/outLogin', {
-    method: 'POST',
-    ...(options || {}),
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(true);
+    }, 1);
   });
 }
 
