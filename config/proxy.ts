@@ -1,8 +1,8 @@
 /*
  * @Author: lijiahao@youlai.cn lijiahao@youlai.cn
  * @Date: 2022-08-08 14:04:11
- * @LastEditors: lijiahao@youlai.cn lijiahao@youlai.cn
- * @LastEditTime: 2022-08-16 23:29:56
+ * @LastEditors: 李家豪 1206185316@qq.com
+ * @LastEditTime: 2023-04-22 18:06:25
  * @FilePath: /fronted_end/config/proxy.ts
  * @Description:
  */
@@ -17,12 +17,17 @@
  *
  * @doc https://umijs.org/docs/guides/proxy
  */
+
+console.log(process.env.NODE_ENV);
+
+const TARGET =
+  process.env.NODE_ENV === 'development' ? 'http://81.70.17.220:3000/' : 'http://127.0.0.1:3000/';
 export default {
   dev: {
     // localhost:8000/api/** -> https://preview.pro.ant.design/api/**
     '/qiushui/': {
       // 要代理的地址
-      target: 'http://127.0.0.1:3000/',
+      target: TARGET,
       // 配置了这个可以从 http 代理到 https
       // 依赖 origin 的功能可能需要这个，比如 cookie
       changeOrigin: true,
