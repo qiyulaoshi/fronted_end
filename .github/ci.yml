@@ -31,9 +31,12 @@ jobs:
         WELCOME: "ssh scp ssh pipelines"
         LASTSSH: "Doing something after copying"
       with:
+        # 服务器IP地址
         host: ${{ secrets.TG_HOST }}
+        # 服务器用户名
         user: ${{ secrets.TG_USER }}
         pass: ${{ secrets.TG_PASS }}
         connect_timeout: 10s
         local: './dist/*'
-        remote: /usr/share/nginx/html
+        # 上传文件存放地址
+        remote: /www/wwwroot/qiushui/fronted_end/dist/
