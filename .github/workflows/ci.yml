@@ -8,14 +8,23 @@ on:
 
 # 开始任务
 jobs:
-  build:
+   deploy:
    runs-on: ubuntu-latest
-   steps:
-   - uses: actions/checkout@v2
-   - name: Build
-    run: npm install && npm run build
-   - name: Deploy
-    uses: cross-the-world/scp-pipeline@master
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        npm install
+
+    - name: Build and bundle static files
+      run: |
+        npm run build
+
+    - name: Upload to server
+      uses: appleboy/scp-action@master
+
     env:
      WELCOME: "ssh scp ssh pipelines"
      LASTSSH: "Doing something after copying"
