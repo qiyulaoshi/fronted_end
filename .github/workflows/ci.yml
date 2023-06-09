@@ -20,7 +20,7 @@ jobs:
 
   # 命名这个步骤为构建Build
    - name: Build
-     // 运行 安装和打包任务
+     # 运行 安装和打包任务
     run: npm install && npm run build
 
     # 命名这个任务为发布Deploy
