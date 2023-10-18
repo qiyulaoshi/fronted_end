@@ -37,6 +37,12 @@ export async function login(body: API.LoginParams) {
   });
 }
 
+export async function hello() {
+  return request<API.LoginResult>('/qiushui/hello', {
+    method: 'GET',
+  });
+}
+
 /** 注册接口 POST /qiushui/user/register */
 export async function register(body: API.LoginParams) {
   return request<API.LoginResult>('/qiushui/user/register', {

@@ -1,5 +1,5 @@
 import Footer from '@/components/Footer';
-import { login, register } from '@/services/ant-design-pro/api';
+import { hello, login, register } from '@/services/ant-design-pro/api';
 import { LockOutlined, MobileOutlined, UserOutlined } from '@ant-design/icons';
 import {
   LoginForm,
@@ -7,7 +7,7 @@ import {
   ProFormDependency,
   ProFormText,
 } from '@ant-design/pro-components';
-import { history, useModel } from '@umijs/max';
+import { history, useModel, useRequest } from '@umijs/max';
 import { useSessionStorageState } from 'ahooks';
 import { message, Tabs } from 'antd';
 import React, { useState } from 'react';
@@ -27,6 +27,8 @@ const Login: React.FC = () => {
       }));
     }
   };
+
+  useRequest(() => hello());
 
   const handleSubmit = async (values: API.LoginParams) => {
     if (type === 'account') {
