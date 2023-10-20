@@ -17,6 +17,7 @@ export default defineConfig({
   history: {
     type: 'hash',
   },
+  base: '/frontend',
 
   /**
    * @name 兼容性设置
