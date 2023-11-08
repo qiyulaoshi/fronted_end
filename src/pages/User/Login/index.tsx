@@ -88,10 +88,7 @@ const Login: React.FC = () => {
         >
           <Tabs activeKey={type} onChange={setType}>
             <Tabs.TabPane key="account" tab="账户密码登录" />
-            {orderType === '9527' &&
-              {
-                /*<Tabs.TabPane key="register" tab="注册" />*/
-              }}
+            {orderType === '9527' && <Tabs.TabPane key="register" tab="注册" />}
           </Tabs>
 
           {type === 'account' && (
