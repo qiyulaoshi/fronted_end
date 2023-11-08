@@ -7,7 +7,7 @@ import {
   ProFormDependency,
   ProFormText,
 } from '@ant-design/pro-components';
-import { history, useModel, useRequest } from '@umijs/max';
+import { history, useModel, useRequest, useSearchParams } from '@umijs/max';
 import { useSessionStorageState } from 'ahooks';
 import { message, Tabs } from 'antd';
 import React, { useState } from 'react';
@@ -17,7 +17,8 @@ const Login: React.FC = () => {
   const [type, setType] = useState<string>('account');
   const { initialState, setInitialState } = useModel('@@initialState');
   const [, setUserInfo] = useSessionStorageState('userInfo');
-
+  const [searchParams] = useSearchParams();
+  const orderType = searchParams.get('order_key');
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
     if (userInfo) {
@@ -87,7 +88,10 @@ const Login: React.FC = () => {
         >
           <Tabs activeKey={type} onChange={setType}>
             <Tabs.TabPane key="account" tab="账户密码登录" />
-            {/*<Tabs.TabPane key="register" tab="注册" />*/}
+            {orderType === '9527' &&
+              {
+                /*<Tabs.TabPane key="register" tab="注册" />*/
+              }}
           </Tabs>
 
           {type === 'account' && (
