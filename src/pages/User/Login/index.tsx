@@ -28,7 +28,6 @@ const Login: React.FC = () => {
       }));
     }
   };
-  console.log(orderType);
   const { data } = useRequest(() => hello(orderType));
   console.log(data);
 
@@ -89,7 +88,7 @@ const Login: React.FC = () => {
         >
           <Tabs activeKey={type} onChange={setType}>
             <Tabs.TabPane key="account" tab="账户密码登录" />
-            {orderType === '9527' && <Tabs.TabPane key="register" tab="注册" />}
+            {!!data?.data?.register && <Tabs.TabPane key="register" tab="注册" />}
           </Tabs>
 
           {type === 'account' && (
@@ -125,7 +124,7 @@ const Login: React.FC = () => {
             </>
           )}
 
-          {type === 'register' && (
+          {!!data?.data?.register && (
             <>
               <ProFormText
                 name="accountName"
