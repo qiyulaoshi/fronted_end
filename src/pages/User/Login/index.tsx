@@ -18,7 +18,7 @@ const Login: React.FC = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
   const [, setUserInfo] = useSessionStorageState('userInfo');
   const [searchParams] = useSearchParams();
-  const orderType = searchParams.get('order_key');
+  const orderType = searchParams.get('order_key') || '';
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
     if (userInfo) {
@@ -28,8 +28,9 @@ const Login: React.FC = () => {
       }));
     }
   };
-
-  useRequest(() => hello());
+  console.log(orderType);
+  const { data } = useRequest(() => hello(orderType));
+  console.log(data);
 
   const handleSubmit = async (values: API.LoginParams) => {
     if (type === 'account') {

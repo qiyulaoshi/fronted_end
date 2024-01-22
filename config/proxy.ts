@@ -22,7 +22,9 @@ console.log(process.env.NODE_ENV);
 
 const TARGET =
   // process.env.NODE_ENV === 'development' ? 'http://81.70.17.220:3000/' : 'http://127.0.0.1:3000/';
-  process.env.NODE_ENV === 'development' ? 'http://192.168.1.9:9530/' : 'http://192.168.1.9:9530/';
+  process.env.NODE_ENV === 'development'
+    ? 'https://nas.lijiahao.cc:5703'
+    : 'http://192.168.1.9:9530/';
 export default {
   dev: {
     // localhost:8000/api/** -> https://preview.pro.ant.design/api/**

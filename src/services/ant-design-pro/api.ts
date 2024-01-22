@@ -37,9 +37,10 @@ export async function login(body: API.LoginParams) {
   });
 }
 
-export async function hello() {
+export async function hello(orderType?: string) {
   return request<API.LoginResult>('/qiushui/hello', {
     method: 'GET',
+    params: { orderType },
   });
 }
 
