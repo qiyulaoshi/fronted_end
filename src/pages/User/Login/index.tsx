@@ -1,5 +1,5 @@
 import Footer from '@/components/Footer';
-import { hello, login, register } from '@/services/ant-design-pro/api';
+import { hello, login, register } from '@/services/ant-design-pro';
 import { LockOutlined, MobileOutlined, UserOutlined } from '@ant-design/icons';
 import {
   LoginForm,
@@ -19,6 +19,7 @@ const Login: React.FC = () => {
   const [, setUserInfo] = useSessionStorageState('userInfo');
   const [searchParams] = useSearchParams();
   const orderType = searchParams.get('order_key') || '';
+
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
     if (userInfo) {
@@ -28,8 +29,8 @@ const Login: React.FC = () => {
       }));
     }
   };
-  const { data } = useRequest(() => hello(orderType));
-  console.log(data);
+
+  useRequest(() => hello(orderType), { refreshDeps: [orderType] });
 
   const handleSubmit = async (values: API.LoginParams) => {
     if (type === 'account') {
@@ -69,7 +70,7 @@ const Login: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.lang} data-lang></div>
+      <div className={styles.lang} data-lang />
       <div className={styles.content}>
         <LoginForm
           logo={<img alt="logo" src="/logo.svg" />}
@@ -88,7 +89,7 @@ const Login: React.FC = () => {
         >
           <Tabs activeKey={type} onChange={setType}>
             <Tabs.TabPane key="account" tab="账户密码登录" />
-            {!!data?.data?.register && <Tabs.TabPane key="register" tab="注册" />}
+            <Tabs.TabPane key="register" tab="注册" />
           </Tabs>
 
           {type === 'account' && (
@@ -124,7 +125,7 @@ const Login: React.FC = () => {
             </>
           )}
 
-          {!!data?.data?.register && (
+          {type === 'register' && (
             <>
               <ProFormText
                 name="accountName"
