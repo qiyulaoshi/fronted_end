@@ -4,12 +4,12 @@ import { message, notification } from 'antd';
 import type { RequestConfig, ResponseInterceptor } from '@@/plugin-request/request';
 
 const requestWebApiInterceptor = (url: string, options: AxiosRequestConfig) => {
-  const token = JSON.parse(sessionStorage.getItem('userInfo') || '{}');
-  if (token?.token) {
+  const token = sessionStorage.getItem('token');
+  if (token) {
+    console.log(token, url, JSON.parse(token), '===');
     const transferHeader = {
       ...options?.headers,
-      Authorization: `Bearer ${token?.token}`,
-      'content-type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${JSON.parse(token)}`,
     };
     options.headers = transferHeader;
   }
@@ -48,7 +48,6 @@ const responseMiddleware: ResponseInterceptor = (response) => {
 
 const errorHandler = async (error: any) => {
   const { response } = error;
-  console.log(response);
   if ([404, 500, 401].includes(response?.status)) {
     notification.error({
       message: `${response?.status}:${response?.statusText}`,
@@ -64,5 +63,6 @@ export default {
   errorConfig: {
     errorHandler,
   },
+  baseURL: 'qiushui/',
   timeout: 1000 * 60,
 } as RequestConfig;

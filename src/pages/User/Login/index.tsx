@@ -1,12 +1,7 @@
 import Footer from '@/components/Footer';
-import { hello, login, register } from '@/services/ant-design-pro';
-import { LockOutlined, MobileOutlined, UserOutlined } from '@ant-design/icons';
-import {
-  LoginForm,
-  ProFormCheckbox,
-  ProFormDependency,
-  ProFormText,
-} from '@ant-design/pro-components';
+import { hello, login } from '@/services/ant-design-pro';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { LoginForm, ProFormCheckbox, ProFormText } from '@ant-design/pro-components';
 import { history, useModel, useRequest, useSearchParams } from '@umijs/max';
 import { useSessionStorageState } from 'ahooks';
 import { message, Tabs } from 'antd';
@@ -17,6 +12,7 @@ const Login: React.FC = () => {
   const [type, setType] = useState<string>('account');
   const { initialState, setInitialState } = useModel('@@initialState');
   const [, setUserInfo] = useSessionStorageState('userInfo');
+  const [, setToken] = useSessionStorageState('token');
   const [searchParams] = useSearchParams();
   const orderType = searchParams.get('order_key') || '';
 
@@ -33,44 +29,27 @@ const Login: React.FC = () => {
   useRequest(() => hello(orderType), { refreshDeps: [orderType] });
 
   const handleSubmit = async (values: API.LoginParams) => {
-    if (type === 'account') {
-      try {
-        // 登录
-        const res = await login(values);
-        if (res.code === 200) {
-          message.success('登录成功！');
-          setUserInfo(res.data);
-          await fetchUserInfo();
-          const urlParams = new URL(window.location.href).searchParams;
-          history.push(urlParams.get('redirect') || '/');
-          return;
-        }
-        message.error(res?.msg);
-        // 如果失败去设置用户错误信息
-      } catch (error) {
-        console.log(error);
-        message.error('登录失败，请重试！');
+    try {
+      // 登录
+      const res = await login(values);
+      if (res.code === 200) {
+        message.success('登录成功！');
+        setUserInfo(res.data);
+        setToken(res?.data?.token);
+        await fetchUserInfo();
+        const urlParams = new URL(window.location.href).searchParams;
+        history.push(urlParams.get('redirect') || '/');
+        return;
       }
-    } else {
-      try {
-        // 注册
-        const res = await register(values);
-        if (res.code === 200) {
-          message.success('注册成功！');
-          setType('account');
-          return;
-        }
-        message.error(res.msg);
-        // 如果失败去设置用户错误信息
-      } catch (error) {
-        console.log(error);
-      }
+      // 如果失败去设置用户错误信息
+    } catch (error) {
+      console.log(error);
+      message.error('登录失败，请重试！');
     }
   };
 
   return (
     <div className={styles.container}>
-      <div className={styles.lang} data-lang />
       <div className={styles.content}>
         <LoginForm
           logo={<img alt="logo" src="/logo.svg" />}
@@ -80,7 +59,7 @@ const Login: React.FC = () => {
           }}
           submitter={{
             searchConfig: {
-              submitText: type === 'account' ? '登录' : '注册',
+              submitText: '登录',
             },
           }}
           onFinish={async (values) => {
@@ -89,136 +68,52 @@ const Login: React.FC = () => {
         >
           <Tabs activeKey={type} onChange={setType}>
             <Tabs.TabPane key="account" tab="账户密码登录" />
-            <Tabs.TabPane key="register" tab="注册" />
           </Tabs>
 
-          {type === 'account' && (
-            <>
-              <ProFormText
-                name="userName"
-                fieldProps={{
-                  size: 'large',
-                  prefix: <UserOutlined className={styles.prefixIcon} />,
-                }}
-                placeholder="用户名"
-                rules={[
-                  {
-                    required: true,
-                    message: '请输入用户名!',
-                  },
-                ]}
-              />
-              <ProFormText.Password
-                name="password"
-                fieldProps={{
-                  size: 'large',
-                  prefix: <LockOutlined className={styles.prefixIcon} />,
-                }}
-                placeholder="密码"
-                rules={[
-                  {
-                    required: true,
-                    message: '请输入密码！',
-                  },
-                ]}
-              />
-            </>
-          )}
-
-          {type === 'register' && (
-            <>
-              <ProFormText
-                name="accountName"
-                placeholder="用户名"
-                rules={[
-                  {
-                    required: true,
-                    message: '请输入用户名！',
-                  },
-                ]}
-              />
-              <ProFormText.Password
-                name="password"
-                fieldProps={{
-                  size: 'large',
-                  prefix: <LockOutlined className={styles.prefixIcon} />,
-                }}
-                placeholder="密码"
-                rules={[
-                  {
-                    required: true,
-                    message: '请输入密码！',
-                  },
-                ]}
-              />
-              <ProFormDependency name={['password']}>
-                {({ password }) => {
-                  return (
-                    <ProFormText.Password
-                      name="confirmPassword"
-                      fieldProps={{
-                        size: 'large',
-                        prefix: <LockOutlined className={styles.prefixIcon} />,
-                      }}
-                      placeholder="密码"
-                      rules={[
-                        {
-                          required: true,
-                          message: '请再次输入密码！',
-                        },
-                        ({}) => ({
-                          validator(_, value) {
-                            if (!value || password === value) {
-                              return Promise.resolve();
-                            }
-                            return Promise.reject(new Error('两次密码不一致，请重新输入密码！'));
-                          },
-                        }),
-                      ]}
-                    />
-                  );
-                }}
-              </ProFormDependency>
-
-              <ProFormText
-                fieldProps={{
-                  size: 'large',
-                  prefix: <MobileOutlined className={styles.prefixIcon} />,
-                  maxLength: 11,
-                }}
-                name="mobile"
-                placeholder="手机号"
-                rules={[
-                  {
-                    required: true,
-                    message: '请输入手机号！',
-                  },
-                  {
-                    pattern: /^1\d{10}$/,
-                    message: '请输入手机号！',
-                  },
-                ]}
-              />
-            </>
-          )}
-          {type === 'account' && (
-            <div
+          <ProFormText
+            name="userName"
+            fieldProps={{
+              size: 'large',
+              prefix: <UserOutlined className={styles.prefixIcon} />,
+            }}
+            placeholder="用户名"
+            rules={[
+              {
+                required: true,
+                message: '请输入用户名!',
+              },
+            ]}
+          />
+          <ProFormText.Password
+            name="password"
+            fieldProps={{
+              size: 'large',
+              prefix: <LockOutlined className={styles.prefixIcon} />,
+            }}
+            placeholder="密码"
+            rules={[
+              {
+                required: true,
+                message: '请输入密码！',
+              },
+            ]}
+          />
+          <div
+            style={{
+              marginBottom: 24,
+            }}
+          >
+            <ProFormCheckbox noStyle name="autoLogin">
+              自动登录
+            </ProFormCheckbox>
+            <a
               style={{
-                marginBottom: 24,
+                float: 'right',
               }}
             >
-              <ProFormCheckbox noStyle name="autoLogin">
-                自动登录
-              </ProFormCheckbox>
-              <a
-                style={{
-                  float: 'right',
-                }}
-              >
-                忘记密码
-              </a>
-            </div>
-          )}
+              忘记密码
+            </a>
+          </div>
         </LoginForm>
       </div>
       <Footer />

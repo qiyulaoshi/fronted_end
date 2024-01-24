@@ -1,13 +1,14 @@
-import { outLogin } from '@/services/ant-design-pro';
-import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import { outLogin, register } from '@/services/ant-design-pro';
+import { ModalForm, ProFormDependency, ProFormText } from '@ant-design/pro-components';
 import { history, useModel } from '@umijs/max';
-import { Avatar, Menu, Spin } from 'antd';
+import { Avatar, Menu, message, Spin } from 'antd';
 import type { ItemType } from 'antd/lib/menu/hooks/useItems';
 import { stringify } from 'querystring';
 import type { MenuInfo } from 'rc-menu/lib/interface';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
+import { LockOutlined, LogoutOutlined, MobileOutlined, SettingOutlined } from '@ant-design/icons';
 
 export type GlobalHeaderRightProps = {
   menu?: boolean;
@@ -33,9 +34,9 @@ const loginOut = async () => {
   }
 };
 
-const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
+const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
-
+  const [modalVisit, setModalVisit] = useState(false);
   const onMenuClick = useCallback(
     (event: MenuInfo) => {
       const { key } = event;
@@ -45,7 +46,10 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
         loginOut();
         return;
       }
-      history.push(`/account/${key}`);
+      if (key === 'register') {
+        setModalVisit(true);
+        return;
+      }
     },
     [setInitialState],
   );
@@ -73,20 +77,12 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   }
 
   const menuItems: ItemType[] = [
-    ...(menu
+    ...(currentUser?.role === '3'
       ? [
           {
-            key: 'center',
-            icon: <UserOutlined />,
-            label: '个人中心',
-          },
-          {
-            key: 'settings',
+            key: 'register',
             icon: <SettingOutlined />,
-            label: '个人设置',
-          },
-          {
-            type: 'divider' as const,
+            label: '注册用户',
           },
         ]
       : []),
@@ -102,17 +98,112 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   );
 
   return (
-    <HeaderDropdown overlay={menuHeaderDropdown}>
-      <span className={`${styles.action} ${styles.account}`}>
-        <Avatar
-          size="small"
-          className={styles.avatar}
-          src={'https://avatars.githubusercontent.com/u/52739370?v=4'}
-          alt="avatar"
+    <>
+      <HeaderDropdown overlay={menuHeaderDropdown}>
+        <span className={`${styles.action} ${styles.account}`}>
+          <Avatar
+            size="small"
+            className={styles.avatar}
+            src={'https://avatars.githubusercontent.com/u/52739370?v=4'}
+            alt="avatar"
+          />
+          <span className={`${styles.name} anticon`}>{currentUser.userName}</span>
+        </span>
+      </HeaderDropdown>
+      <ModalForm
+        title="注册新用户"
+        width={500}
+        visible={modalVisit}
+        modalProps={{
+          onCancel() {
+            setModalVisit(false);
+          },
+          destroyOnClose: true,
+        }}
+        onFinish={async (values) => {
+          const res = await register(values);
+          if (res.code === 200) {
+            message.success('注册成功！');
+            return true;
+          }
+          message.error(res.msg);
+          return true;
+        }}
+      >
+        <ProFormText
+          name="accountName"
+          placeholder="用户名"
+          rules={[
+            {
+              required: true,
+              message: '请输入用户名！',
+            },
+          ]}
         />
-        <span className={`${styles.name} anticon`}>{currentUser.userName}</span>
-      </span>
-    </HeaderDropdown>
+        <ProFormText.Password
+          name="password"
+          fieldProps={{
+            size: 'large',
+            prefix: <LockOutlined className={styles.prefixIcon} />,
+          }}
+          placeholder="密码"
+          rules={[
+            {
+              required: true,
+              message: '请输入密码！',
+            },
+          ]}
+        />
+        <ProFormDependency name={['password']}>
+          {({ password }) => {
+            return (
+              <ProFormText.Password
+                name="confirmPassword"
+                fieldProps={{
+                  size: 'large',
+                  prefix: <LockOutlined className={styles.prefixIcon} />,
+                }}
+                placeholder="密码"
+                rules={[
+                  {
+                    required: true,
+                    message: '请再次输入密码！',
+                  },
+                  ({}) => ({
+                    validator(_, value) {
+                      if (!value || password === value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error('两次密码不一致，请重新输入密码！'));
+                    },
+                  }),
+                ]}
+              />
+            );
+          }}
+        </ProFormDependency>
+
+        <ProFormText
+          fieldProps={{
+            size: 'large',
+            prefix: <MobileOutlined className={styles.prefixIcon} />,
+            maxLength: 11,
+          }}
+          name="mobile"
+          placeholder="手机号"
+          rules={[
+            {
+              required: true,
+              message: '请输入手机号！',
+            },
+            {
+              pattern: /^1\d{10}$/,
+              message: '请输入手机号！',
+            },
+          ]}
+        />
+      </ModalForm>
+    </>
   );
 };
 

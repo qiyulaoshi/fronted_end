@@ -9,6 +9,7 @@ import requestConfig from './request';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
+const whitePath = ['/frontend/user/login'];
 
 /**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
@@ -21,15 +22,17 @@ export async function getInitialState(): Promise<{
 }> {
   const fetchUserInfo = async () => {
     try {
-      const msg = await queryCurrentUser();
-      return msg;
+      const data = await queryCurrentUser();
+      sessionStorage.setItem('userInfo', JSON.stringify(data?.data));
+      return data?.data;
     } catch (error) {
+      sessionStorage.clear();
       history.push(loginPath);
     }
     return undefined;
   };
   // 如果不是登录页面，执行
-  if (window.location.pathname !== loginPath) {
+  if (!whitePath?.includes(history.location.pathname.replace(/\/+$/, ''))) {
     const currentUser = await fetchUserInfo();
     return {
       fetchUserInfo,
@@ -53,9 +56,11 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
     },
     footerRender: () => <Footer />,
     onPageChange: () => {
-      const { location } = history;
       // 如果没有登录，重定向到 login
-      if (!initialState?.currentUser?.userName && location.pathname !== loginPath) {
+      if (
+        !initialState?.currentUser?.userName &&
+        !whitePath?.includes(history.location.pathname.replace(/\/+$/, ''))
+      ) {
         history.push(loginPath);
       }
     },

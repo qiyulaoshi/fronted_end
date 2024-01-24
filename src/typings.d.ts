@@ -22,3 +22,20 @@ declare module 'bizcharts-plugin-slider';
 declare let ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION: 'site' | undefined;
 
 declare const REACT_APP_ENV: 'test' | 'dev' | 'pre' | false;
+
+declare interface IRequestRoot<T> {
+  code: number;
+  data: T;
+  msg: string;
+}
+
+declare interface IRequestList<T> {
+  code: number;
+  msg: string;
+  data: {
+    page: number;
+    page_size: number;
+    count: number;
+    list: T[];
+  };
+}

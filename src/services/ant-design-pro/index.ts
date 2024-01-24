@@ -5,12 +5,11 @@
 import { request } from '@umijs/max';
 
 /** 获取当前的用户 GET /api/currentUser */
-export async function queryCurrentUser(options?: { [key: string]: any }) {
-  const userInfo = JSON.parse(sessionStorage.getItem('userInfo') || '') as API.CurrentUser;
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(userInfo as API.CurrentUser);
-    }, 1);
+export async function queryCurrentUser() {
+  const userInfo = JSON.parse(sessionStorage.getItem('userInfo') || '');
+  return request<IRequestRoot<API.CurrentUser>>('/user/getUserInfo', {
+    method: 'POST',
+    data: { userName: userInfo.userName },
   });
 }
 
@@ -25,22 +24,22 @@ export async function outLogin(options?: { [key: string]: any }) {
 
 /** 登录接口 POST /api/login/account */
 export async function login(body: API.LoginParams) {
-  return request<API.LoginResult>('/qiushui/user/login', {
+  return request<API.LoginResult>('/user/login', {
     method: 'POST',
     data: body,
   });
 }
 
 export async function hello(orderType?: string) {
-  return request<API.LoginResult>('/qiushui/hello', {
+  return request<API.LoginResult>('/hello', {
     method: 'GET',
     params: { orderType },
   });
 }
 
-/** 注册接口 POST /qiushui/user/register */
+/** 注册接口 POST /user/register */
 export async function register(body: API.LoginParams) {
-  return request<API.LoginResult>('/qiushui/user/register', {
+  return request<API.LoginResult>('/user/register', {
     method: 'POST',
     data: body,
   });
